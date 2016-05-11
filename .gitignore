@@ -1,0 +1,49 @@
+install.packages("foreign")
+require (foreign)
+install.packages("fpp")
+library (fpp)
+install.packages("forecast")
+require(forecast)
+lab<- read.csv("C:\\Users\\SALA-C27\\Downloads\\IndicadoresENOE_2016-04-25.csv")
+part<-ts(lab [,1], start=2005, frequency=4)
+### definir modelo
+mod1<- ses(part,alpha = 0.2, initial = "simple", h=4)
+mod2<- ses(part,alpha = 0.6, initial = "simple", h=4)
+mod3<- ses(part,alpha = 1, initial = "simple", h=4)
+plot(mod1,plot.conf=FALSE, ylab="tasas", xlab="Año", main=" ", fcol="white", type="o")
+#### graficando ajustes que mi modelo calcularia desde el inicio 
+lines(fitted(mod1), col="blue", type="o")
+lines(fitted(mod2), col="red", type="o")
+lines(fitted(mod3), col="green", type="o")
+#### graficando la media del pronostico
+lines(mod1$mean, col="blue", type="o")
+lines(mod2$mean, col="red", type="o")
+lines(mod3$mean, col="green", type="o")
+legend("topleft",lty=1, col=c(1,"blue","red","green"), 
+       c("data", expression(alpha == 0.2), expression(alpha == 0.6),
+         expression(alpha == 1), pch=1)
+names(mod1)
+aju1<- mod1$fitted       
+aju2<- mod1$fitted
+aju3<- mod1$fitted
+resmod1<- (part-aju1)
+resmod2<- (part-aju2)
+resmod3<- (part-aju3)
+mod123<- data.frame(part,aju1,aju2,aju3,resmod1,resmod2,resmod3)
+mod123
+res1<-(resmod1-mod1$residuals)
+res2<-(resmod2-mod1$residuals)
+res3<-(resmod2-mod1$residuals)
+res1
+res2
+res3
+
+### Ejercicio
+##elegir 2 series de tiempo sin tendencia ni estacionalidad
+### Serie 1 alpha=.1,.6,.9
+### Graficar las series de tiempo
+### Calcular el MAE, RMSE, MAPE, SSE
+### Decidir en cada una de las series cual se ocuparian
+## con base a los MAE, RMSE, MAPE, SSE.
+### Argumentar por que creen que es mejor utilizar un alpha cercano a 0 o cercano a 1
+### el scrip subanlo a github y la grafica y la arguentacion enviarlo por word 
